@@ -71,7 +71,7 @@
 
 > 本节只展示本轮真实测试得到的数据、现象和归因。
 
-Recommended subsections:
+推荐小节：
 
 1. `本轮执行概览`
 2. `可唤起性与存在必要性检查`
@@ -80,9 +80,9 @@ Recommended subsections:
 5. `回归样本测试`
 6. `分歧样本明细`
 
-If a subsection has no measured data, keep it but mark as `待补测` and explain the required next run.
+如果某个小节没有实测数据，保留小节，但标为 `待补测`，并说明下一步应该怎么补测。
 
-For static-only evaluations of documentation/workflow skills, use these result subsections instead:
+如果是文档型 / 工作流型 skill 的纯静态评测，使用这些结果小节：
 
 1. `本轮执行概览`
 2. `静态结构检查`
@@ -90,34 +90,40 @@ For static-only evaluations of documentation/workflow skills, use these result s
 4. `发现的问题`
 5. `待补测计划`
 
-Do not include fake endpoint, cost, latency, or sample-quality data when no live run occurred.
+没有真实运行时，不要编造 endpoint、成本、耗时或样本质量数据。
 
 ## Skill 优化方向
 
 > 本节把评测结果反哺回 skill。每条优化方向都应能追溯到数据或失败样本。
 
-Use a table:
+使用表格：
 
 | 优化项 | 来源证据 | 建议修改 | 验证方式 |
 | --- | --- | --- | --- |
 
-Include invocation and no-skill baseline follow-ups when relevant.
+如果相关，补充可唤起性和无 skill 基线的后续动作。
 
 ## 产物与复现位置
 
 > 本节用于复现和后续接着做优化。
 
-Include paths or links for:
+包含以下路径或链接：
 
-- raw logs
-- raw outputs
-- full dataset
-- optimization/regression/holdout sets
-- judge outputs
-- disagreement samples
-- generated report
-- optimization plan
+- 原始日志
+- 原始输出
+- 全量数据集
+- 优化集 / 回归集 / 保留集
+- 评判输出
+- 分歧样本
+- 生成的报告
+- 优化方案
 
 ## 出处与参考
 
-Include methodology and external references when the report is guiding future practice.
+当报告会作为后续实践参考时，应包含工作法和外部来源，例如：
+
+1. LangChain, Evaluating Skills：https://www.langchain.com/blog/evaluating-skills
+1. LangChain, Better harness: a recipe for harness hill climbing with evals：https://www.langchain.com/blog/better-harness-a-recipe-for-harness-hill-climbing-with-evals
+1. Google Machine Learning Crash Course, Dividing datasets：https://developers.google.com/machine-learning/crash-course/overfitting/dividing-datasets
+1. scikit-learn, `train_test_split` documentation：https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html
+1. LangSmith, Code evaluator：https://docs.langchain.com/langsmith/code-evaluator

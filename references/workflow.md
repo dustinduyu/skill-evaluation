@@ -1,16 +1,16 @@
 # Skill / Agent 评测流程
 
-写报告前，先用这份文件设计评测流程。
+写报告前，先用这份文件设计评测流程。本文的核心思路来自 skill 评测中的“是否能被调用、是否优于无 skill 基线”视角，以及 agent 质量评测中的分层观测、trace / logs / metrics 证据化方法。[1][2]
 
 ## 1. 理解评测对象
 
 需要阅读：
 
 - `SKILL.md`
-- referenced files under `references/`, `scripts/`, `assets/`
-- local code paths used by the skill
-- existing logs, traces, metrics, datasets, prior reports
-- user-provided methodology or reference samples
+- `references/`、`scripts/`、`assets/` 下被引用的文件
+- skill 实际调用的本地代码路径
+- 已有日志、trace、metrics、数据集、历史报告
+- 用户提供的工作法或参考样例
 
 需要记录：
 
@@ -25,7 +25,7 @@
 
 ## 2. 使用固定三层
 
-始终使用这三层。如果目标具备接近 agent 的能力，也把这些能力映射进三层，不新增第四层。
+始终使用这三层。如果目标具备接近 agent 的能力，也把这些能力映射进三层，不新增第四层。这样做的目的是把运行问题、链路问题、业务效果问题分开定位，同时保留 trace / logs / metrics 能支撑的证据链。[2]
 
 | 层级 | 观察对象 | 示例指标 |
 | --- | --- | --- |
@@ -50,8 +50,8 @@
 1. **运行目标**：能否稳定运行。
 2. **能力目标**：内部链路能否产出可用中间结果。
 3. **业务目标**：是否解决用户或业务问题。
-4. **唤起目标**：agent 能否正确选择这个 skill。
-5. **必要性目标**：相比无 skill 基线，是否有质量或稳定性收益。
+4. **唤起目标**：agent 能否正确选择这个 skill。[1]
+5. **必要性目标**：相比无 skill 基线，是否有质量或稳定性收益。[1]
 
 每个指标都要定义：
 
@@ -73,68 +73,76 @@
 | 副作用覆盖 | 写回、归档、发送等动作 vs 安全规则、身份和权限要求 |
 | 可移植性 | 绝对本地路径、硬编码凭证、本地 CLI、命名兼容性 |
 
-## 4. Dataset Split
+## 4. 数据集拆分
 
-Use three sets when the target will be improved over time:
+当目标会持续迭代时，使用三类数据集。这里借鉴传统机器学习中训练集、验证集、测试集的职责分离思想：用于调规则的数据、用于日常防退化的数据、用于阶段验收的数据应尽量分开，避免只对当前样本过拟合。[3][4]
 
-| Set | Purpose | Equivalent Idea |
+| 集合 | 用途 | 对应思想 |
 | --- | --- | --- |
-| 优化集 | tune rules, prompts, thresholds, behavior | training / development |
-| 回归集 | rerun after every change to catch regressions | validation / regression |
-| 保留集 | stage-gate acceptance; use sparingly | test / holdout |
+| 优化集 | 调规则、prompt、阈值和行为 | training / development |
+| 回归集 | 每次修改后重跑，防止退化 | validation / regression |
+| 保留集 | 阶段性验收，谨慎使用 | test / holdout |
 
-Suggested ratios by skill stage:
+按 skill 阶段建议比例：
 
-| Stage | 优化集 | 回归集 | 保留集 |
+| 阶段 | 优化集 | 回归集 | 保留集 |
 | --- | --- | --- | --- |
 | 起步阶段 | 50%-60% | 25%-35% | 10%-15% |
 | 成长期 | 35%-45% | 35%-45% | 15%-20% |
 | 稳定应用阶段 | 20%-30% | 50%-60% | 15%-25% |
 | 高风险上线前 | 15%-25% | 50%-60% | 20%-30% |
 
-Split rules:
+拆分规则：
 
-- Use stratified splitting when sample types differ meaningfully.
-- Keep edge cases and known failures in the regression set after they are confirmed.
-- Keep holdout labels and samples stable; do not tune against them repeatedly.
-- If the sample pool is small, explain the limitation and emphasize qualitative failure analysis.
+- 当样本类型差异明显时，使用分层拆分。
+- 边界样本和已确认失败样本进入回归集，后续每次改动都复测。
+- 保留集的样本和标签应保持稳定，不要反复拿它调规则。
+- 如果样本池很小，明确说明限制，并加强定性失败分析。
 
-## 5. Closed Loop
+## 5. 闭环沉淀
 
-The evaluation ends only after findings are deposited into durable artifacts:
+评测不是写完报告就结束。只有当发现被沉淀成可复用资产，后续修改才能防退化、可复盘、可继续优化。
 
-| Deposit | Where It Goes |
+| 沉淀内容 | 沉淀位置 |
 | --- | --- |
-| all samples | dataset directory |
-| optimization set | `optimization_set.*` |
-| regression set | `regression_set.*` |
-| holdout set | `holdout_set.*` |
-| disagreement samples | report table and dataset |
-| judging rubric | report or skill references |
-| skill fixes | optimization plan, issues, or PR |
-| invocation prompts | invocation eval set |
-| no-skill baseline | baseline artifact |
+| 全量样本 | dataset 目录 |
+| 优化集 | `optimization_set.*` |
+| 回归集 | `regression_set.*` |
+| 保留集 | `holdout_set.*` |
+| 分歧样本 | 报告表格和数据集 |
+| 评判口径 | 报告或 skill references |
+| skill 修复项 | 优化方案、issue 或 PR |
+| 唤起提示词 | invocation eval set |
+| 无 skill 基线 | baseline artifact |
 
 ## 6. 静态评测模式
 
-Use static mode when the target skill has no safe executable entrypoint, or when the user only provides a skill repository and does not authorize live external actions.
+当目标 skill 没有安全的可执行入口，或用户只提供 skill 仓库但没有授权外部动作时，使用静态评测模式。
 
-Static mode still produces a full report. It should not pretend to have tested live output quality.
+静态评测也要产出完整报告，但不能假装已经测过真实输出质量。
 
-| Step | What To Do | Result Label |
+| 步骤 | 具体动作 | 结果标签 |
 | --- | --- | --- |
-| metadata validation | validate `SKILL.md` frontmatter and skill name/description | `已测` |
-| file inventory | read `SKILL.md`, references, scripts, README, agents metadata | `已测` |
-| workflow coverage | check whether the skill describes inputs, outputs, boundaries, workflow, quality checks | `已测` |
-| dependency and safety review | identify external tools, credentials, live writeback, destructive actions | `已测` |
-| invocation design | design positive/negative/similar-skill prompts | `待补测` unless router logs are run |
-| live output quality | run the skill on a realistic task and judge output | `待补测` unless actually run |
-| no-skill baseline | compare against general-model behavior | `待补测` unless actually run |
+| metadata 校验 | 校验 `SKILL.md` frontmatter、name、description | `已测` |
+| 文件盘点 | 阅读 `SKILL.md`、references、scripts、README、agents metadata | `已测` |
+| 流程覆盖 | 检查是否说明输入、输出、边界、流程、质量检查 | `已测` |
+| 依赖与安全检查 | 识别外部工具、凭证、在线写回、破坏性动作 | `已测` |
+| 唤起设计 | 设计正例、负例、相似 skill 干扰提示词 | 未跑 router 日志时标 `待补测` |
+| 真实输出质量 | 用真实任务运行 skill 并评判输出 | 未实际运行时标 `待补测` |
+| 无 skill 基线 | 和通用模型临场处理对比 | 未实际运行时标 `待补测` |
 
-In static mode, the `测试结果` section should contain:
+静态评测的 `测试结果` 部分应包含：
 
 - `本轮执行概览`
 - `静态结构检查`
 - `可唤起性与存在必要性检查`
 - `发现的问题`
-- optional `待补测计划`
+- 可选的 `待补测计划`
+
+## 出处与参考
+
+1. LangChain, Evaluating Skills：https://www.langchain.com/blog/evaluating-skills
+1. Agent Quality-4.pdf：用于参考 Agent Quality 的分层观测、Outside-In / Inside-Out、trace / logs / metrics 证据框架。
+1. Google Machine Learning Crash Course, Dividing datasets：https://developers.google.com/machine-learning/crash-course/overfitting/dividing-datasets
+1. scikit-learn, `train_test_split` documentation：https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html
+1. LangSmith, Code evaluator：https://docs.langchain.com/langsmith/code-evaluator
