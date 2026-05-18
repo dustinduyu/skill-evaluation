@@ -111,3 +111,16 @@ For workflow/documentation skills without executable scripts:
 | skill invocation behavior without router logs | `待补测` or `间接证据` |
 | final output quality without a real task run | `待补测` |
 | existence necessity without a no-skill baseline | `间接证据` plus `待补测` |
+
+## Metadata Compatibility
+
+When validating a target skill, distinguish between "unusable" and "portable-risk":
+
+| Finding | How To Report |
+| --- | --- |
+| strict validator fails because `name` contains underscores or uppercase | report as `可移植性风险` unless the current runtime demonstrably rejects it |
+| missing `description` | report as `阻塞问题` because skill invocation depends on it |
+| description is broad but plausible | report as invocation risk and add similar-skill tests |
+| local absolute paths in commands | report as portability risk and suggest parameterization or setup notes |
+
+Do not claim the skill cannot work solely because one validator uses stricter naming rules than the current deployment environment.

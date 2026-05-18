@@ -64,6 +64,15 @@ For each metric, define:
 | judge | code, rule, model, human, or hybrid |
 | result | measured value or `待补测` |
 
+Also check documentation-to-implementation alignment:
+
+| Check | What To Compare |
+| --- | --- |
+| responsibility coverage | responsibilities in `SKILL.md` vs commands/scripts that actually execute them |
+| command coverage | common commands vs all declared responsibilities |
+| side-effect coverage | writeback/archive/send actions vs safety rules and identity/permission requirements |
+| portability | absolute local paths, hardcoded credentials, local-only CLIs, naming compatibility |
+
 ## 4. Dataset Split
 
 Use three sets when the target will be improved over time:
