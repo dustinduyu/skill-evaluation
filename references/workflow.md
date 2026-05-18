@@ -1,10 +1,10 @@
-# Skill / Agent Evaluation Workflow
+# Skill / Agent 评测流程
 
-Use this file to design the evaluation before writing the report.
+写报告前，先用这份文件设计评测流程。
 
-## 1. Understand The Target
+## 1. 理解评测对象
 
-Read:
+需要阅读：
 
 - `SKILL.md`
 - referenced files under `references/`, `scripts/`, `assets/`
@@ -12,66 +12,66 @@ Read:
 - existing logs, traces, metrics, datasets, prior reports
 - user-provided methodology or reference samples
 
-Capture:
+需要记录：
 
-| Field | What To Record |
+| 字段 | 记录内容 |
 | --- | --- |
-| Target | Single skill, combined skills, or agent-like workflow |
-| Core job | What the target is responsible for |
-| Inputs | Prompt, file, dataset, API, upstream artifact |
-| Outputs | Structured result, report, file, action, decision |
-| Dependencies | APIs, keys, CLIs, models, repos, tools |
-| Boundaries | What this skill does not own |
+| 评测对象 | 单一 skill、组合 skill，或接近 agent 的工作流 |
+| 核心任务 | 这个对象主要负责什么 |
+| 输入 | prompt、文件、数据集、API、上游产物 |
+| 输出 | 结构化结果、报告、文件、动作、判断 |
+| 依赖 | API、key、CLI、模型、仓库、工具 |
+| 边界 | 这个 skill 不负责什么 |
 
-## 2. Use The Fixed Three Layers
+## 2. 使用固定三层
 
-Always use these three layers. If the target has agent-like capabilities, map them into these layers instead of adding a fourth layer.
+始终使用这三层。如果目标具备接近 agent 的能力，也把这些能力映射进三层，不新增第四层。
 
-| Layer | What It Observes | Example Metrics |
+| 层级 | 观察对象 | 示例指标 |
 | --- | --- | --- |
-| 运行框架层 | runtime, routing, permissions, API, logs, cost, latency, output files | success rate, error rate, cost, latency, invocation accuracy |
-| 能力链路层 | data preparation, tool chain, state handoff, schema, intermediate outputs | schema completeness, step success, retrieval coverage, transformation consistency |
-| 业务效果层 | final answer quality and task value | accuracy, relevance, false positives, false negatives, user usefulness, baseline lift |
+| 运行框架层 | 运行环境、路由、权限、API、日志、成本、耗时、输出文件 | 成功率、错误率、成本、耗时、唤起准确率 |
+| 能力链路层 | 数据准备、工具链、状态交接、Schema、中间产物 | Schema 完整性、步骤成功率、召回覆盖、转换一致性 |
+| 业务效果层 | 最终答案质量和任务价值 | 准确性、相关性、误判、漏判、用户价值、基线提升 |
 
-Agent-like behavior mapping:
+接近 agent 的行为映射：
 
-| Behavior | Put It Under | Why |
+| 行为 | 放入哪一层 | 原因 |
 | --- | --- | --- |
-| planning | 能力链路层 | It affects task decomposition and ordering |
-| memory | 能力链路层 | It affects state continuity and repeated work |
-| state management | 运行框架层 or 能力链路层 | Runtime state is framework; semantic state is chain |
-| tool choice | 能力链路层 | It affects whether the right capability is used |
-| self-correction | 业务效果层 plus 能力链路层 | It affects final quality and retry path |
+| 规划能力 | 能力链路层 | 影响任务拆解和执行顺序 |
+| 记忆能力 | 能力链路层 | 影响状态连续性和重复处理 |
+| 状态管理 | 运行框架层或能力链路层 | 运行态归运行框架，语义态归能力链路 |
+| 工具选择 | 能力链路层 | 影响是否使用了正确能力 |
+| 自我修正 | 业务效果层 + 能力链路层 | 影响最终质量和重试路径 |
 
-## 3. Define Goals And Metrics
+## 3. 定义目标和指标
 
-Every evaluation needs:
+每次评测都需要覆盖：
 
-1. **Execution goals**: can it run reliably?
-2. **Capability goals**: can its internal chain produce usable intermediate outputs?
-3. **Business goals**: does it solve the user/business problem?
-4. **Invocation goals**: can an agent correctly select this skill?
-5. **Necessity goals**: does the skill outperform or stabilize a no-skill baseline?
+1. **运行目标**：能否稳定运行。
+2. **能力目标**：内部链路能否产出可用中间结果。
+3. **业务目标**：是否解决用户或业务问题。
+4. **唤起目标**：agent 能否正确选择这个 skill。
+5. **必要性目标**：相比无 skill 基线，是否有质量或稳定性收益。
 
-For each metric, define:
+每个指标都要定义：
 
-| Field | Meaning |
+| 字段 | 含义 |
 | --- | --- |
-| metric name | concise Chinese name |
-| layer | one of the fixed three layers |
-| formula | exact calculation or judgment rule |
-| data source | log, JSON, trace, model output, human label |
-| judge | code, rule, model, human, or hybrid |
-| result | measured value or `待补测` |
+| 指标名 | 简洁中文名称 |
+| 所属层级 | 固定三层之一 |
+| 计算规则 | 明确公式或判断口径 |
+| 数据来源 | 日志、JSON、trace、模型输出、人工标签 |
+| 评判方式 | 代码、规则、模型、人工或混合 |
+| 结果 | 实测值或 `待补测` |
 
-Also check documentation-to-implementation alignment:
+同时检查文档与实现是否一致：
 
-| Check | What To Compare |
+| 检查项 | 对比内容 |
 | --- | --- |
-| responsibility coverage | responsibilities in `SKILL.md` vs commands/scripts that actually execute them |
-| command coverage | common commands vs all declared responsibilities |
-| side-effect coverage | writeback/archive/send actions vs safety rules and identity/permission requirements |
-| portability | absolute local paths, hardcoded credentials, local-only CLIs, naming compatibility |
+| 职责覆盖 | `SKILL.md` 中声明的职责 vs 实际命令/脚本是否覆盖 |
+| 命令覆盖 | 常用命令 vs 已声明的全部职责 |
+| 副作用覆盖 | 写回、归档、发送等动作 vs 安全规则、身份和权限要求 |
+| 可移植性 | 绝对本地路径、硬编码凭证、本地 CLI、命名兼容性 |
 
 ## 4. Dataset Split
 
@@ -115,7 +115,7 @@ The evaluation ends only after findings are deposited into durable artifacts:
 | invocation prompts | invocation eval set |
 | no-skill baseline | baseline artifact |
 
-## 6. Static Evaluation Mode
+## 6. 静态评测模式
 
 Use static mode when the target skill has no safe executable entrypoint, or when the user only provides a skill repository and does not authorize live external actions.
 

@@ -1,6 +1,6 @@
-# Metrics And Judging
+# 指标与评判方式
 
-Use this file when defining measurable evaluation criteria.
+定义可测量评估标准时，使用这份说明。
 
 ## Skill-Specific Gates
 
@@ -99,7 +99,7 @@ Use measured results when available. Use these labels for unmeasured items:
 
 Never hide uncertainty inside prose.
 
-## Static Evaluation Result Labels
+## 静态评测结果标签
 
 For workflow/documentation skills without executable scripts:
 
@@ -112,9 +112,9 @@ For workflow/documentation skills without executable scripts:
 | final output quality without a real task run | `待补测` |
 | existence necessity without a no-skill baseline | `间接证据` plus `待补测` |
 
-## Metadata Compatibility
+## Metadata 兼容性
 
-When validating a target skill, distinguish between "unusable" and "portable-risk":
+校验目标 skill 时，要区分“不可用”和“可移植性风险”：
 
 | Finding | How To Report |
 | --- | --- |

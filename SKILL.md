@@ -1,91 +1,91 @@
 ---
 name: skill-eval-report
-description: Generate evidence-based Skill or Agent evaluation reports from a target SKILL.md, local repo, logs, traces, datasets, and reference methodology. Use when asked to evaluate a skill, complex skill, agent-like workflow, or combination of skills; design eval metrics, run or summarize tests, compare with no-skill baselines, assess skill invocation/discoverability, choose code/model/human evaluation methods, and produce a structured report for Feishu, Markdown, or another document system.
+description: 用于生成基于证据的 Skill / Agent 评估报告。适用于评测一个目标 SKILL.md、本地仓库、复杂 skill、组合 skill 或接近 agent 的工作流；会读取代码、日志、trace、metrics、数据集和参考工作法，设计评测指标，运行或复盘测试，比较无 skill 基线，评估可唤起性和存在必要性，选择代码/规则/模型/人工评判方式，并输出飞书、Markdown 或其他文档系统可用的结构化评估报告。
 ---
 
-# Skill Eval Report
+# Skill 评估报告生成
 
-Use this skill to evaluate a Skill / Agent / complex skill chain and produce a concise, evidence-based evaluation report. The report should be useful both as a decision document and as a reusable eval artifact for future regressions.
+使用这个 skill 来评估一个 Skill / Agent / 复杂 skill 链路，并产出一份简洁、基于证据、可复用的评估报告。报告既要能帮助当下做判断，也要能沉淀为后续回归评测资产。
 
-## Non-negotiables
+## 硬性原则
 
-- Do not invent test data. If a result was not measured, mark it as `待补测` or `间接证据`, and explain what must be run next.
-- Always inspect the target skill files and relevant code before designing metrics.
-- Always use the fixed three-layer architecture: `运行框架层`、`能力链路层`、`业务效果层`.
-- Always include two Skill-specific gates:
-  - `可唤起性`: whether the skill can be correctly selected when needed.
-  - `存在必要性`: whether the skill adds value over a no-skill / general-model baseline.
-- Do not collapse everything into a weighted total score unless the user explicitly asks and accepts the tradeoff.
-- If writing to Feishu or another live doc, prefer local section edits and preserve comments; avoid whole-document replacement.
+- 不编造测试数据。没有真实测量的结果，必须标记为 `待补测` 或 `间接证据`，并说明下一步需要怎么补测。
+- 设计指标前，必须先阅读目标 skill 文件和相关代码。
+- 固定使用三层架构：`运行框架层`、`能力链路层`、`业务效果层`。
+- 必须包含两个 Skill 专项目标：
+  - `可唤起性`：需要使用这个 skill 时，agent 能否正确选中它。
+  - `存在必要性`：相比无 skill / 通用模型临场处理，这个 skill 是否带来稳定收益。
+- 除非用户明确要求并接受取舍，否则不要把所有指标加权合成一个总分。
+- 如果写入飞书或其他在线文档，优先做局部章节更新并尽量保留评论；避免整篇覆盖。
 
-## Workflow
+## 工作流程
 
-1. **Collect context**
-   - Read the target `SKILL.md`, referenced files, scripts, logs, trace/metrics files, test artifacts, and any existing report.
-   - If a methodology doc or reference report is provided, read it first and use it as the structural baseline.
-   - If the target is a combination of skills, identify the chain and dependencies.
+1. **收集上下文**
+   - 阅读目标 `SKILL.md`、引用文件、脚本、日志、trace / metrics、测试产物和已有报告。
+   - 如果用户提供了工作法文档或参考样例，先阅读它们，并把它们作为报告结构基线。
+   - 如果目标是组合 skill，先识别链路顺序、依赖关系和边界。
 
-2. **Understand the object**
-   - Summarize what the skill does, its inputs, outputs, dependencies, and boundaries.
-   - Separate actual responsibilities from adjacent modules such as publishing, notification, storage, or UI.
-   - If the skill behaves like an agent, map planning, memory, state, tool choice, and self-correction into the fixed three layers.
+2. **理解评测对象**
+   - 总结 skill 做什么、输入是什么、输出是什么、依赖什么、边界在哪里。
+   - 区分它真正负责的事情，以及发布、通知、存储、UI 等相邻模块。
+   - 如果 skill 表现得像 agent，把规划、记忆、状态管理、工具选择、自我修正映射进固定三层，不新增层级。
 
-3. **Build the three-layer model**
-   - `运行框架层`: environment, credentials, permissions, API calls, logs, costs, latency, file outputs, router/invocation behavior.
-   - `能力链路层`: internal capability chain, data transformation, schema integrity, tool orchestration, state handoff.
-   - `业务效果层`: final task quality, relevance, accuracy, user value, false positives/negatives, business tradeoffs.
+3. **建立三层模型**
+   - `运行框架层`：环境、凭证、权限、API、日志、成本、耗时、输出文件、路由/唤起行为。
+   - `能力链路层`：内部能力链路、数据转换、Schema 完整性、工具编排、状态交接。
+   - `业务效果层`：最终任务质量、相关性、准确性、用户价值、误判/漏判、业务取舍。
 
-4. **Define goals and metrics**
-   - Translate each layer into observable metrics and calculation rules.
-   - Include `可唤起性` metrics such as target-prompt hit rate, negative-prompt non-trigger rate, and similar-skill interference accuracy.
-   - Include `存在必要性` metrics comparing with a no-skill baseline on quality, stability, reproducibility, and artifact reuse.
-   - For metrics, specify data source, formula, judge type, and interpretation.
+4. **定义目标和指标**
+   - 把每一层转成可观测指标和计算规则。
+   - 加入 `可唤起性` 指标，例如目标提示词命中率、负例不误触率、相似 skill 干扰正确率。
+   - 加入 `存在必要性` 指标，对比有 skill 和无 skill 基线在质量、稳定性、可复现性、资产沉淀上的差异。
+   - 每个指标都要写清数据来源、计算规则、评判方式和解释口径。
 
-5. **Design the test flow**
-   - Specify data sources, preparation, filtering, dataset split, judging method, execution plan, and failure feedback.
-   - Use `优化集 / 回归集 / 保留集` when repeated improvement is expected.
-   - Select judge types by scenario: code judge for deterministic artifacts, rule judge for clear criteria, model judge for semantic triage, human judge for gold labels and business tradeoffs.
+5. **设计测试流程**
+   - 说明数据从哪里来、怎么准备、怎么筛选、怎么拆分、用什么评判方式、如何执行、失败如何回流。
+   - 如果目标会持续迭代，使用 `优化集 / 回归集 / 保留集`。
+   - 按场景选择评判方式：确定性产物用代码评判，明确规则用规则评判，语义初筛用模型评判，金标和业务取舍用人工评判。
 
-6. **Run or reconstruct tests**
-   - Prefer running the target skill locally when safe and authorized.
-   - Capture exact commands, exit codes, output files, cost, latency, and sample-level results.
-   - If using historical logs only, state the evidence source clearly and avoid presenting reconstructed analysis as a new run.
-   - If the target is a documentation/workflow skill with no executable entrypoint, run a static evaluation mode: inspect files, validate skill metadata, check workflow and template coverage, and mark live output quality as `待补测`.
+6. **运行或复盘测试**
+   - 在安全且已授权的情况下，优先本地实际运行目标 skill。
+   - 记录精确命令、退出码、输出文件、成本、耗时和样本级结果。
+   - 如果只使用历史日志，必须明确证据来源，不要把复盘分析写成“本轮新跑”。
+   - 如果目标是无可执行入口的文档/工作流型 skill，使用静态评测模式：读取文件、校验 metadata、检查流程和模板覆盖，并把真实输出质量标为 `待补测`。
 
-7. **Analyze results**
-   - Report measured data first, then interpretation.
-   - Include disagreement samples when rules, model judgment, or human labels diverge.
-   - Convert failures into eval assets and skill optimization items.
+7. **分析结果**
+   - 先展示测量数据，再解释含义。
+   - 当规则、模型评判或人工标签不一致时，列出分歧样本。
+   - 把失败点同时沉淀为 eval 资产和 skill 优化项。
 
-8. **Write the report**
-   - Use the report structure in [report-template.md](references/report-template.md).
-   - Keep the report readable for non-eval readers: open each major section with a short quote-style explanation.
-   - Use tables for metrics, steps, dataset splits, sample details, and optimization items.
-   - Use diagrams only when they clarify architecture or flow; diagrams should follow the same logic as the text.
+8. **撰写报告**
+   - 使用 [报告模板](references/report-template.md) 的结构。
+   - 面向不懂评测的读者，每个主要章节开头用简短引用说明本节在做什么。
+   - 指标、步骤、数据集拆分、样本明细、优化项优先用表格。
+   - 只有当图能显著解释架构或流程时才加图；图里的逻辑必须和正文一致。
 
-## Reference Files
+## 参考文件
 
-- Read [workflow.md](references/workflow.md) for the full methodology and data-split guidance.
-- Read [metrics-and-judging.md](references/metrics-and-judging.md) when defining metrics, judges, and sample-level outputs.
-- Read [report-template.md](references/report-template.md) before writing the final report.
-- Read [feishu-output.md](references/feishu-output.md) when publishing or editing a Feishu document.
-- Read [reference-sample-notes.md](references/reference-sample-notes.md) when you need a compact example of how the `wechat_source + content_scoring` report applied the method.
+- 定义完整工作法、三层架构和数据集拆分时，阅读 [workflow.md](references/workflow.md)。
+- 设计指标、评判方式和样本级输出时，阅读 [metrics-and-judging.md](references/metrics-and-judging.md)。
+- 写最终报告前，阅读 [report-template.md](references/report-template.md)。
+- 创建或更新飞书文档时，阅读 [feishu-output.md](references/feishu-output.md)。
+- 需要参考 `wechat_source + content_scoring` 样例如何落地时，阅读 [reference-sample-notes.md](references/reference-sample-notes.md)。
 
-## Output Contract
+## 输出要求
 
-The final report must include:
+最终报告必须包含：
 
-- Evaluation object and evidence scope
-- Three-layer decomposition
-- Goals and metrics, including `可唤起性` and `存在必要性`
-- Test flow with step outputs
-- Dataset preparation and split rationale
-- Judge selection rules
-- Measured results
-- Failure/disagreement analysis
-- Skill optimization directions
-- Reproducible artifacts and references
+- 评测对象和证据范围
+- 三层拆解
+- 评测目标与指标，包括 `可唤起性` 和 `存在必要性`
+- 测试流程与每一步输出物
+- 数据准备与数据集拆分依据
+- 评判方式选择规则
+- 真实测得的结果
+- 失败点 / 分歧样本分析
+- Skill 优化方向
+- 可复现产物和参考来源
 
-For static-only evaluations, still produce the complete report structure. Put measured static findings under `已测`, mark unrun live behavior under `待补测`, and include the exact follow-up test needed.
+如果是静态评测，也必须保留完整报告结构。已测的静态发现标为 `已测`，未运行的真实行为标为 `待补测`，并写清需要补什么测试。
 
-If the user asks for a new live document, create or update it and return the link. If the user asks for a local artifact, write Markdown under the requested repo or working directory.
+如果用户要求新建在线文档，创建或更新文档后返回链接。如果用户要求本地产物，把 Markdown 写到指定仓库或工作目录。

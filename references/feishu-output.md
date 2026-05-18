@@ -1,35 +1,35 @@
-# Feishu Output Guidance
+# 飞书输出规范
 
-Use this file when the user asks to create or update a Feishu document.
+当用户要求创建或更新飞书文档时，使用这份说明。
 
-## Writing Rules
+## 写作规则
 
-- Prefer creating a new document for a new evaluation report.
-- When updating an existing report, use section-level insert/replace operations rather than full overwrite, so comments are preserved.
-- Do not mention internal source document names unless the user asks. Apply the methodology, not its bibliography, in the main body.
-- Use quote blocks at the start of major sections to orient non-eval readers.
-- Use tables for metrics, samples, steps, and optimization items.
-- If a table is meant for later human review, put prompts in headers and leave cells blank.
+- 新评估报告优先新建文档。
+- 更新已有报告时，优先做章节级插入/替换，不整篇覆盖，以便保留评论。
+- 除非用户要求，不在正文里提内部来源文档名称；正文贯彻方法，不展示方法来源清单。
+- 每个主要章节开头使用引用块，帮助不懂评测的读者理解本节作用。
+- 指标、样本、步骤、优化项优先用表格。
+- 如果表格用于后续人工复核，把填写提示放在表头，单元格留空。
 
-## Feishu Editing Pattern
+## 飞书编辑流程
 
-1. Fetch the current doc before editing.
-2. Save a local copy.
-3. Identify headings and image/table tokens.
-4. Prepare small Markdown fragments.
-5. Apply local section edits.
-6. Fetch again and inspect headings, duplicated sections, and key new terms.
+1. 编辑前先拉取当前文档。
+2. 保存本地副本。
+3. 识别标题、图片 token、表格位置。
+4. 准备小块 Markdown 片段。
+5. 做局部章节更新。
+6. 再次拉取，检查标题、重复章节和关键新增术语。
 
-Avoid whole-document replacement unless the document has no important comments.
+除非文档没有重要评论，否则避免整篇替换。
 
-## Visuals
+## 配图
 
-Use visuals only when they explain structure:
+只在图片能解释结构时使用：
 
-- architecture overview
-- evaluation flow
-- dataset preparation and split
-- judge selection
-- failure feedback loop
+- 架构总览
+- 评测流程
+- 数据准备与拆分
+- 评判方式选择
+- 失败回流闭环
 
-For generated diagrams with Chinese labels, prefer deterministic text overlay or a native whiteboard when available. Verify final placement after upload.
+如果图里包含中文标签，优先使用可控文字叠加或飞书画板。上传后检查最终位置。

@@ -29,7 +29,7 @@ The updated sample also added:
 
 ## Reusable Report Shape
 
-Use this order:
+使用这个顺序：
 
 1. 执行摘要
 2. Skill 理解与分层

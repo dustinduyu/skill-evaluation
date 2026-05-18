@@ -1,4 +1,4 @@
 interface:
   display_name: "Skill Eval Report"
   short_description: "生成可复用的 Skill / Agent 评测报告"
-  default_prompt: "Use $skill-eval-report to evaluate a local skill and generate a structured report."
+  default_prompt: "使用 $skill-eval-report 评测一个本地 skill，并生成结构化评估报告。"

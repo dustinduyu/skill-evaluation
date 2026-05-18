@@ -1,48 +1,48 @@
-# Evaluation Report Template
+# 评估报告模板
 
-Use this structure for a concise report. Keep it short enough for a manager to read in 7-8 minutes unless the user asks for a deep appendix.
+使用这个结构产出简洁报告。除非用户要求深度附录，否则控制在管理者 7-8 分钟可读完的长度。
 
 ## 执行摘要
 
 > 本节先给结论：这个 skill 是否可运行、是否有价值、主要问题是什么、下一步应该怎么改。
 
-Include a 5-8 row table:
+包含一张 5-8 行的关键结论表：
 
 | 结论 | 证据 | 对 skill 的含义 |
 | --- | --- | --- |
-| 链路可以稳定跑通 | measured runtime evidence | can enter regression |
-| 质量有主要风险 | disagreement or failure data | optimize specific step |
-| 可唤起性待测 / 已测 | invocation evidence | improve name/description or routing |
-| 存在必要性待测 / 已测 | no-skill baseline evidence | prove or refine skill value |
+| 链路可以稳定跑通 | 真实运行证据 | 可以进入回归评测 |
+| 质量有主要风险 | 分歧样本或失败数据 | 优化特定步骤 |
+| 可唤起性待测 / 已测 | 唤起证据 | 优化 name / description 或路由 |
+| 存在必要性待测 / 已测 | 无 skill 基线证据 | 证明或修正 skill 价值 |
 
 ## Skill 理解与分层
 
 > 本节说明评测前先理解了什么：skill 做什么、边界在哪里、按三层如何拆。
 
-Include:
+包含：
 
-- evaluation object
-- core chain
-- skill responsibilities
-- boundaries
-- three-layer table
+- 评测对象
+- 核心链路
+- skill 职责
+- 边界
+- 三层表
 
 ## 评测目标与指标体系
 
 > 本节回答“到底评什么”。每个目标都要落到可观测指标和计算规则。
 
-Include:
+包含：
 
-- target goals
-- metric table with columns: 指标 / 所属层级 / 计算规则 / 本轮结果
-- principles for metric selection
+- 评测目标
+- 指标表，列为：指标 / 所属层级 / 计算规则 / 本轮结果
+- 指标选择原则
 
-Required metrics:
+必备指标：
 
-- success / error / latency / cost where applicable
-- schema or intermediate artifact completeness
-- task quality
-- disagreement or failure count
+- 成功率 / 错误 / 耗时 / 成本
+- Schema 或中间产物完整性
+- 任务质量
+- 分歧或失败数量
 - 可唤起性
 - 存在必要性
 
@@ -50,22 +50,22 @@ Required metrics:
 
 > 本节说明评测如何形成闭环：从理解对象，到沉淀 eval 资产和 skill 优化方案。
 
-Include:
+包含：
 
-- closed-loop flow
-- what gets deposited where
-- connection between failures and future evals
+- 闭环流程
+- 沉淀什么、沉淀到哪里
+- 失败点如何进入后续 eval
 
 ## 测试方法与执行流程
 
 > 本节说明这次评测怎么执行：数据从哪里来，如何准备，怎么拆分，什么时候用哪种评判方式。
 
-Include:
+包含：
 
-- flow diagram if helpful
-- step table with columns: 步骤 / 具体动作 / 对应层级 / 输出物
-- dataset split rationale
-- judge selection table
+- 必要时加入流程图
+- 步骤表，列为：步骤 / 具体动作 / 对应层级 / 输出物
+- 数据集拆分依据
+- 评判方式选择表
 
 ## 测试结果
 
