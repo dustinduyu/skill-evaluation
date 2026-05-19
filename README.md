@@ -7,7 +7,7 @@
 ## 适用场景
 
 - 评测一个新的 skill 是否可用、是否值得保留。
-- 评测一个复杂 skill 或组合 skill 的能力链路。
+- 评测一个多环节 skill 的能力链路。
 - 对接近 agent 的工作流做分层评估。
 - 根据真实运行日志、测试数据或历史产物生成评估报告。
 - 评估 skill 的可唤起性、存在必要性、无 skill 基线和失败回流。
@@ -61,7 +61,7 @@ git clone https://github.com/dustinduyu/skill-evaluation.git ~/.agents/skills/sk
 ```
 
 ```text
-使用 $skill-evaluation，根据这份工作法和历史日志，评测某个组合 skill。
+使用 $skill-evaluation，根据这份工作法和历史日志，评测某个多环节 skill。
 报告需要包含三层拆解、可唤起性、存在必要性、测试结果和优化方向。
 ```
 
