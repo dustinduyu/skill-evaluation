@@ -1,5 +1,5 @@
 ---
-name: skill-eval-report
+name: skill-evaluation
 description: 用于生成基于证据的 Skill / Agent 评估报告。适用于评测一个目标 SKILL.md、本地仓库、复杂 skill、组合 skill 或接近 agent 的工作流；会读取代码、日志、trace、metrics、数据集和参考工作法，设计评测指标，运行或复盘测试，比较无 skill 基线，评估可唤起性和存在必要性，选择代码/规则/模型/人工评判方式，并输出飞书、Markdown 或其他文档系统可用的结构化评估报告。
 ---
 

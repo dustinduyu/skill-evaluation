@@ -1,6 +1,6 @@
-# Skill Eval Report
+# Skill Evaluation
 
-`skill-eval-report` 是一个用于生成 Skill / Agent 评估报告的 Codex / OpenSkills skill。
+`skill-evaluation` 是一个用于生成 Skill / Agent 评估报告的 Codex / OpenSkills skill。
 
 它会根据目标 `SKILL.md`、本地仓库、代码、日志、trace、metrics、测试产物和参考工作法，完成评测对象理解、三层拆解、指标设计、测试执行或复盘、失败归因，并输出一份结构化、可复用的评估报告。
 
@@ -40,14 +40,14 @@
 
 ```bash
 mkdir -p ~/.codex/skills
-git clone https://github.com/dustinduyu/skill-eval-report.git ~/.codex/skills/skill-eval-report
+git clone https://github.com/dustinduyu/skill-evaluation.git ~/.codex/skills/skill-evaluation
 ```
 
 如果你的环境使用 `.agents/skills`：
 
 ```bash
 mkdir -p ~/.agents/skills
-git clone https://github.com/dustinduyu/skill-eval-report.git ~/.agents/skills/skill-eval-report
+git clone https://github.com/dustinduyu/skill-evaluation.git ~/.agents/skills/skill-evaluation
 ```
 
 重启 Codex 后即可使用。
@@ -55,18 +55,18 @@ git clone https://github.com/dustinduyu/skill-eval-report.git ~/.agents/skills/s
 ## 使用示例
 
 ```text
-使用 $skill-eval-report 评测这个本地 skill：
+使用 $skill-evaluation 评测这个本地 skill：
 /Users/dustin/Documents/new_project/zaowang-ai-news/bilibili_source/SKILL.md
 请实际运行可安全执行的测试，并输出 Markdown 评估报告。
 ```
 
 ```text
-使用 $skill-eval-report，根据这份工作法和历史日志，评测某个组合 skill。
+使用 $skill-evaluation，根据这份工作法和历史日志，评测某个组合 skill。
 报告需要包含三层拆解、可唤起性、存在必要性、测试结果和优化方向。
 ```
 
 ```text
-使用 $skill-eval-report，更新这篇飞书评估报告。
+使用 $skill-evaluation，更新这篇飞书评估报告。
 请保留评论，做局部章节更新，不要整篇覆盖。
 ```
 
@@ -98,4 +98,3 @@ references/
 - 有可执行入口时尽量真实运行；没有可执行入口时使用静态评测模式。
 - 不默认加权汇总总分，除非用户明确要求。
 - 在线文档更新优先局部修改，尽量保留评论。
-
