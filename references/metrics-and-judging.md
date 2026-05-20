@@ -99,6 +99,55 @@
 
 不要把不确定性藏在长段文字里。
 
+报告首页需要把运行框架层和能力链路层的关键检查项做成状态总览。状态建议使用：
+
+| 状态 | 使用场景 |
+| --- | --- |
+| `✅` | 本轮有直接证据证明满足 |
+| `❌` | 本轮有直接证据证明不满足 |
+| `部分满足` | 关键路径可用，但有边界、稳定性或覆盖不足 |
+| `待补测` | 尚无直接证据，不能下结论 |
+
+状态总览至少覆盖：
+
+- 可唤起性 / 路由选择
+- 运行成功率
+- 成本、耗时、错误可观测性
+- 中间产物完整性
+- 工具调用和状态交接
+- 评判结果可复现性
+
+## 数据记录表
+
+评判输出必须保存到可复用的数据记录表。前期可以是 CSV / JSONL / Markdown 表，后续可以升级为 SQLite、LangSmith、飞书多维表格或正式数据库。
+
+推荐拆成三类记录：
+
+| 表 | 粒度 | 典型字段 |
+| --- | --- | --- |
+| `eval_runs` | 一次评测运行 | run_id、命令、环境、数据版本、开始时间、结束时间、总耗时、总成本、输出目录 |
+| `eval_cases` | 一条样本或一个任务 | run_id、case_id、dataset_split、input_ref、expected_ref、actual_output_ref、artifact_path、error |
+| `eval_metrics` | 一个指标结果 | run_id、case_id、layer、metric_key、judge_type、score、pass_fail、comment、review_status |
+
+如果只维护一个表，至少包含：
+
+| 字段 | 说明 |
+| --- | --- |
+| `run_id` | 本次运行 ID |
+| `case_id` | 样本 ID |
+| `dataset_split` | optimization / regression / holdout / ad_hoc |
+| `input_ref` | 输入文本或文件路径 |
+| `expected_ref` | reference output 或人工金标路径 |
+| `actual_output_ref` | 实际输出路径 |
+| `layer` | 三层之一 |
+| `metric_key` | 指标名 |
+| `judge_type` | code / rule / llm / human / mixed |
+| `score` | 数值分或分类标签 |
+| `pass_fail` | pass / fail / partial / pending |
+| `comment` | 简洁解释 |
+| `artifact_path` | 日志、trace、截图或输出文件路径 |
+| `review_status` | unreviewed / reviewed / needs_human |
+
 ## 静态评测结果标签
 
 对于没有可执行脚本的文档型 / 工作流型 skill：
