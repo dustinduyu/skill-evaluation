@@ -125,28 +125,28 @@
 
 | 表 | 粒度 | 典型字段 |
 | --- | --- | --- |
-| `eval_runs` | 一次评测运行 | run_id、命令、环境、数据版本、开始时间、结束时间、总耗时、总成本、输出目录 |
-| `eval_cases` | 一条样本或一个任务 | run_id、case_id、dataset_split、input_ref、expected_ref、actual_output_ref、artifact_path、error |
-| `eval_metrics` | 一个指标结果 | run_id、case_id、layer、metric_key、judge_type、score、pass_fail、comment、review_status |
+| 评测运行记录 | 每轮评测运行的整体记录 | 运行 ID、命令、环境、数据版本、开始时间、结束时间、总耗时、总成本、输出目录 |
+| 测试样本记录 | 每条样本或一个任务的输入输出记录 | 运行 ID、样本 ID、数据集拆分、输入、预期输出、实际输出、产物路径、错误 |
+| 指标结果记录 | 每个指标的评判结果与解释 | 运行 ID、样本 ID、所属层级、指标名、评判方式、分数或标签、通过状态、解释、复核状态 |
 
 如果只维护一个表，至少包含：
 
 | 字段 | 说明 |
 | --- | --- |
-| `run_id` | 本次运行 ID |
-| `case_id` | 样本 ID |
-| `dataset_split` | optimization / regression / holdout / ad_hoc |
-| `input_ref` | 输入文本或文件路径 |
-| `expected_ref` | reference output 或人工金标路径 |
-| `actual_output_ref` | 实际输出路径 |
-| `layer` | 三层之一 |
-| `metric_key` | 指标名 |
-| `judge_type` | code / rule / llm / human / mixed |
-| `score` | 数值分或分类标签 |
-| `pass_fail` | pass / fail / partial / pending |
-| `comment` | 简洁解释 |
-| `artifact_path` | 日志、trace、截图或输出文件路径 |
-| `review_status` | unreviewed / reviewed / needs_human |
+| 运行 ID | 本轮评测运行的稳定 ID |
+| 样本 ID | 测试样本的稳定 ID |
+| 数据集拆分 | 优化集 / 回归集 / 保留集 / 临时样本 |
+| 输入 | 输入文本或文件路径 |
+| 预期输出 | reference output 或人工金标路径 |
+| 实际输出 | 实际输出路径 |
+| 所属层级 | 三层之一 |
+| 指标名 | 被评判的指标 |
+| 评判方式 | 代码 / 规则 / 模型 / 人工 / 混合 |
+| 分数或标签 | 数值分或分类标签 |
+| 通过状态 | 通过 / 不通过 / 部分通过 / 待补测 |
+| 解释 | 简洁解释 |
+| 产物路径 | 日志、trace、截图或输出文件路径 |
+| 复核状态 | 未复核 / 已复核 / 需要人工复核 |
 
 ## 静态评测结果标签
 
