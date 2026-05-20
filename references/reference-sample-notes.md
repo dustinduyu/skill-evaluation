@@ -1,46 +1,47 @@
-# Reference Sample Notes
+# 参考样例笔记
 
-These notes summarize the reusable pattern from the `wechat_source + content_scoring` evaluation report.
+这份笔记提炼 `wechat_source + content_scoring` 评估报告中可复用的做法。它不是固定模板，使用时仍应优先遵循工作法正文。
 
-## What The Sample Did Well
+## 样例中值得复用的做法
 
-- Treated two dependent skills as one evaluated chain.
-- Kept the fixed three layers:
-  - `运行框架层`: API key, WeChat API, logs, output directory, cost, latency.
-  - `能力链路层`: article retrieval, backfill, full-text detail, cleaning, scoring, sorting.
-  - `业务效果层`: whether useful AI news was identified, false positives, false negatives, boundary cases.
-- Used real execution evidence:
-  - four stages ran successfully
-  - full-text detail improved relevant detection from 1/3 to 2/3
-  - 46 raw candidates became 44 deduplicated samples
-  - 16 disagreement samples were deposited for review
-- Avoided a weighted overall score.
-- Converted findings into concrete skill optimizations.
+- 将两个相互依赖的 skill 作为一条组合链路评测。
+- 固定使用三层结构：
+  - `运行框架层`：API key、微信 API、日志、输出目录、成本、耗时。
+  - `能力链路层`：文章获取、回补、全文详情、清洗、评分、排序。
+  - `业务效果层`：是否识别出有价值的 AI 新闻、误判、漏判、边界样本。
+- 使用真实执行证据：
+  - 四个阶段均成功运行。
+  - 全文详情使相关内容识别从 1/3 提升到 2/3。
+  - 46 条原始候选去重后形成 44 条样本。
+  - 16 条分歧样本沉淀为待复核资产。
+- 不做加权总分。
+- 将发现的问题转化为具体的 skill 优化方向。
 
-## Added Methodology Alignment
+## 已补齐的方法论要求
 
-The updated sample also added:
+更新后的样例还补充了：
 
-- `可唤起性`: skill name/description, target prompts, similar skill interference, negative prompts.
-- `存在必要性`: compare with no-skill baseline; if not run, mark as `待补测`.
-- stage-aware dataset split: the evaluated chain was treated as `成长期`, so optimization and regression were both important.
-- judge selection rules: code/rule/model/human each used for different problem types.
-- model judge output aligned with key / score / comment style.
+- `可唤起性`：检查 skill name / description、目标提示词、相似 skill 干扰、负例提示词。
+- `存在必要性`：与无 skill 基线对比；未实际运行时标为 `待补测`。
+- 按阶段选择数据集拆分：该链路被视为 `成长期`，因此优化集和回归集都重要。
+- 评判方式选择规则：代码、规则、模型、人工分别用于不同问题类型。
+- 模型评判输出结构：对齐 key / score / comment 这类可聚合、可解释的格式。
 
-## Reusable Report Shape
+## 可复用报告顺序
 
 使用这个顺序：
 
 1. 执行摘要
 2. Skill 理解与分层
 3. 评测目标与指标体系
-4. 评测流程设计
-5. 测试方法与执行流程
-6. 测试结果
-7. Skill 优化方向
-8. 产物与复现位置
-9. 出处与参考
+4. 评测设计确认
+5. 评测流程设计
+6. 测试方法与执行流程
+7. 测试结果
+8. Skill 优化方向
+9. 产物与复现位置
+10. 出处与参考
 
-## Useful Caution
+## 使用提醒
 
-If the report adds new methodology requirements after a test was already run, do not retrofit fake results. Add a clear `补充检查` section and mark items as `待补测` or `间接证据`.
+如果报告在测试完成后追加了新的方法要求，不要倒推或编造结果。应新增清晰的 `补充检查` 内容，并把未实测项标记为 `待补测` 或 `间接证据`。
